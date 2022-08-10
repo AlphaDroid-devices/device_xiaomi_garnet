@@ -21,7 +21,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.display.DisplayManager;
+import android.os.IBinder;
 import android.util.Log;
+import android.view.Display;
+import android.view.Display.HdrCapabilities;
 
 import org.lineageos.settings.doze.DozeUtils;
 import org.lineageos.settings.dirac.DiracUtils;
@@ -50,5 +54,11 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 
         //  Per App Refresh Rate
         RefreshUtils.startService(context);
+
+        // Override HDR types to enable HDR
+        final IBinder displayToken = SurfaceControl.getInternalDisplayToken();
+        SurfaceControl.overrideHdrTypes(displayToken,
+                new int[] {HdrCapabilities.HDR_TYPE_HDR10,HdrCapabilities.HDR_TYPE_HLG,
+                        HdrCapabilities.HDR_TYPE_HDR10_PLUS});
     }
 }

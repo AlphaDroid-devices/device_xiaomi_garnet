@@ -20,7 +20,7 @@
     android:versionCode="3"
     android:versionName="3.0"
     android:sharedUserId="android.uid.system">
-
+    <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
     <uses-permission android:name="android.permission.DEVICE_POWER" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
