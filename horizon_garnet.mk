@@ -17,6 +17,8 @@ $(call inherit-product, device/xiaomi/garnet/device.mk)
 
 # HorizonDroid stuff
 WITH_GMS := true
+HORIZON_BUILD_TYPE := OFFICIAL
+HORIZON_MAINTAINER := franlop77
 
 PRODUCT_NAME := horizon_garnet
 PRODUCT_DEVICE := garnet
