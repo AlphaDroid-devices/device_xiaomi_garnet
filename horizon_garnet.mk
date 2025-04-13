@@ -15,6 +15,9 @@ $(call inherit-product, vendor/horizon/config/common_full_phone.mk)
 # Inherit from garnet device
 $(call inherit-product, device/xiaomi/garnet/device.mk)
 
+# HorizonDroid stuff
+WITH_GMS := true
+
 PRODUCT_NAME := horizon_garnet
 PRODUCT_DEVICE := garnet
 PRODUCT_MANUFACTURER := Xiaomi
