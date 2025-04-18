@@ -17,6 +17,7 @@ $(call inherit-product, device/xiaomi/garnet/device.mk)
 
 # HorizonDroid stuff
 WITH_GMS := true
+WITH_GMS_VARIANT := core
 TARGET_FACE_UNLOCK_SUPPORTED := true
 HORIZON_BUILD_TYPE := OFFICIAL
 HORIZON_MAINTAINER := franlop77
