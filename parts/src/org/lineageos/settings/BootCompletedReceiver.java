@@ -32,40 +32,49 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Display.HdrCapabilities;
 
+import org.lineageos.settings.powertools.PowerProfileTileService;
 import org.lineageos.settings.thermal.ThermalUtils;
-import org.lineageos.settings.refreshrate.RefreshUtils;
+import org.lineageos.settings.thermal.ThermalTileService;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private static final String TAG = "XiaomiParts";
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        if (DEBUG) Log.i(TAG, "Received intent: " + intent.getAction());
-        switch (intent.getAction()) {
-            case Intent.ACTION_LOCKED_BOOT_COMPLETED:
-                onLockedBootCompleted(context);
-                break;
-            case Intent.ACTION_BOOT_COMPLETED:
-                onBootCompleted(context);
-                break;
+        if (DEBUG) {
+            Log.d(TAG, "Received intent: " + intent.getAction());
         }
-    }
 
-    private static void onLockedBootCompleted(Context context) {
-            ThermalUtils.startService(context);
-            RefreshUtils.startService(context);
-            overrideHdrTypes(context);
-    }
+        if (!intent.getAction().equals(Intent.ACTION_LOCKED_BOOT_COMPLETED)) {
+            return;
+        }
 
-    private static void overrideHdrTypes(Context context) {
-        // Override HDR types to enable Dolby Vision
-        final DisplayManager dm = context.getSystemService(DisplayManager.class);
-        dm.overrideHdrTypes(Display.DEFAULT_DISPLAY, new int[]{
-                HdrCapabilities.HDR_TYPE_DOLBY_VISION, HdrCapabilities.HDR_TYPE_HDR10,
-                HdrCapabilities.HDR_TYPE_HLG, HdrCapabilities.HDR_TYPE_HDR10_PLUS});
-    }
+        // Start Thermal Management Services
+        ThermalUtils.getInstance(context).startService();
+        context.startServiceAsUser(new Intent(context, ThermalTileService.class), UserHandle.CURRENT);
 
-    private static void onBootCompleted(Context context) {
+        // Start Power Profile Tile Service
+        context.startServiceAsUser(new Intent(context, PowerProfileTileService.class), UserHandle.CURRENT);
+
+        // Enable HDR support
+        try {
+            final DisplayManager displayManager = context.getSystemService(DisplayManager.class);
+            if (displayManager != null) {
+                displayManager.overrideHdrTypes(Display.DEFAULT_DISPLAY,
+                        new int[] {
+                            HdrCapabilities.HDR_TYPE_HDR10,
+                            HdrCapabilities.HDR_TYPE_HLG,
+                            HdrCapabilities.HDR_TYPE_HDR10_PLUS
+                        });
+                if (DEBUG) {
+                    Log.d(TAG, "HDR types overridden successfully: HDR10, HLG, HDR10+");
+                }
+            } else {
+                Log.e(TAG, "DisplayManager is null, cannot override HDR types");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to override HDR types", e);
+        }
     }
 }

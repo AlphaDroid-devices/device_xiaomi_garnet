@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 kenway215
+ * Copyright (C) 2025 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,15 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.lineageos.settings.autohbm.AutoHbmActivity;
+import org.lineageos.settings.autohbm.AutoHbmTileService;
+import org.lineageos.settings.autohbm.HbmTileService;
 import org.lineageos.settings.gamebar.GameBarSettingsActivity;
 import org.lineageos.settings.gamebar.GameBarTileService;
+import org.lineageos.settings.thermal.ThermalSettingsActivity;
+import org.lineageos.settings.thermal.ThermalTileService;
+import org.lineageos.settings.powertools.PowerProfileTileService;
+import org.lineageos.settings.powertools.PowertoolsActivity;
 
 public final class TileHandlerActivity extends Activity {
     private static final String TAG = "TileHandlerActivity";
@@ -38,7 +45,11 @@ public final class TileHandlerActivity extends Activity {
     private static final Map<String, Class<?>> TILE_ACTIVITY_MAP = new HashMap<>();
 
     static {
+        TILE_ACTIVITY_MAP.put(AutoHbmTileService.class.getName(), AutoHbmActivity.class);
+        TILE_ACTIVITY_MAP.put(HbmTileService.class.getName(), AutoHbmActivity.class);
         TILE_ACTIVITY_MAP.put(GameBarTileService.class.getName(), GameBarSettingsActivity.class);
+        TILE_ACTIVITY_MAP.put(ThermalTileService.class.getName(), ThermalSettingsActivity.class);
+        TILE_ACTIVITY_MAP.put(PowerProfileTileService.class.getName(), PowertoolsActivity.class);
     }
 
     @Override

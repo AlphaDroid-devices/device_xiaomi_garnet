@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2022 The LineageOS Project
+ * Copyright (C) 2025 kenway214
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-package org.lineageos.settings.refreshrate;
+package org.lineageos.settings.powertools;
 
 import android.os.Bundle;
-
 import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
+import org.lineageos.settings.R;
 
-public class RefreshActivity extends CollapsingToolbarBaseActivity {
-    private static final String TAG_REFRESH = "refresh";
-
+public class PowertoolsActivity extends CollapsingToolbarBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_powertools);
 
-        getFragmentManager().beginTransaction().replace(com.android.settingslib.collapsingtoolbar.R.id.content_frame,
-                new RefreshSettingsFragment(), TAG_REFRESH).commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.powertools_fragment_container,
+                             new PowertoolsSettingsFragment(),
+                             "powertools")
+                    .commit();
+        }
     }
 }
+

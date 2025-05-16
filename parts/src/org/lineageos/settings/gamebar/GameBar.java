@@ -74,38 +74,38 @@ public class GameBar {
     private WindowManager.LayoutParams mLayoutParams;
     private boolean mIsShowing = false;
 
-    private int mTextSizeSp       = 16;
+    private int mTextSizeSp       = 14;
     private int mBackgroundAlpha  = 128;
-    private int mCornerRadius     = 16;
-    private int mPaddingDp        = 12;
+    private int mCornerRadius     = 90;
+    private int mPaddingDp        = 8;
     private String mTitleColorHex = "#FFFFFF";
     private String mValueColorHex = "#FFFFFF";
     private String mOverlayFormat = "full";
-    private String mPosition      = "top_left";
-    private String mSplitMode     = "stacked";
+    private String mPosition      = "top_center";
+    private String mSplitMode     = "side_by_side";
     private int mUpdateIntervalMs = 1000;
     private boolean mDraggable    = false;
 
     private boolean mShowBatteryTemp = false;
-    private boolean mShowCpuUsage    = false;
+    private boolean mShowCpuUsage    = true;
     private boolean mShowCpuClock    = false;
     private boolean mShowCpuTemp     = false;
     private boolean mShowRam         = false;
-    private boolean mShowFps         = false;
+    private boolean mShowFps         = true;
 
-    private boolean mShowGpuUsage    = false;
+    private boolean mShowGpuUsage    = true;
     private boolean mShowGpuClock    = false;
     private boolean mShowGpuTemp     = false;
 
     private boolean mLongPressEnabled      = false;
-    private long mLongPressThresholdMs = 1000;
+    private long mLongPressThresholdMs = 500;
     private boolean mPressActive           = false;
     private float mDownX, mDownY;
-    private static final float TOUCH_SLOP = 20f;
+    private static final float TOUCH_SLOP = 30f;
 
     private GestureDetector mGestureDetector;
-    private boolean mDoubleTapCaptureEnabled = false;
-    private boolean mSingleTapToggleEnabled  = false;
+    private boolean mDoubleTapCaptureEnabled = true;
+    private boolean mSingleTapToggleEnabled  = true;
     private GradientDrawable mBgDrawable;
 
     private int mItemSpacingDp = 8;
@@ -144,10 +144,10 @@ public class GameBar {
                 if (mDoubleTapCaptureEnabled) {
                     if (GameDataExport.getInstance().isCapturing()) {
                         GameDataExport.getInstance().stopCapture();
-                        Toast.makeText(mContext, "Capture Stopped", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.game_bar_doubletap_capture_stop_toast, Toast.LENGTH_SHORT).show();
                     } else {
                         GameDataExport.getInstance().startCapture();
-                        Toast.makeText(mContext, "Capture Started", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.game_bar_doubletap_capture_start_toast, Toast.LENGTH_SHORT).show();
                     }
                     return true;
                 }
@@ -162,7 +162,12 @@ public class GameBar {
                         .edit()
                         .putString("game_bar_format", mOverlayFormat)
                         .apply();
-                    Toast.makeText(mContext, "Overlay Format: " + mOverlayFormat, Toast.LENGTH_SHORT).show();
+                     Toast.makeText(mContext, 
+                        String.format(mContext.getString(R.string.game_bar_overlay_format_toast), 
+                        "full".equals(mOverlayFormat) ? 
+                            mContext.getString(R.string.game_bar_format_entries_full) : 
+                            mContext.getString(R.string.game_bar_format_entries_minimal)), 
+                        Toast.LENGTH_SHORT).show();
                     updateStats();
                     return true;
                 }
@@ -170,40 +175,40 @@ public class GameBar {
             }
         });
     }
-
+    
     public void applyPreferences() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-        mShowFps         = prefs.getBoolean("game_bar_fps_enable", false);
+        mShowFps         = prefs.getBoolean("game_bar_fps_enable", true);
         mShowBatteryTemp = prefs.getBoolean("game_bar_temp_enable", false);
-        mShowCpuUsage    = prefs.getBoolean("game_bar_cpu_usage_enable", false);
+        mShowCpuUsage    = prefs.getBoolean("game_bar_cpu_usage_enable", true);
         mShowCpuClock    = prefs.getBoolean("game_bar_cpu_clock_enable", false);
         mShowCpuTemp     = prefs.getBoolean("game_bar_cpu_temp_enable", false);
         mShowRam         = prefs.getBoolean("game_bar_ram_enable", false);
 
-        mShowGpuUsage    = prefs.getBoolean("game_bar_gpu_usage_enable", false);
+        mShowGpuUsage    = prefs.getBoolean("game_bar_gpu_usage_enable", true);
         mShowGpuClock    = prefs.getBoolean("game_bar_gpu_clock_enable", false);
         mShowGpuTemp     = prefs.getBoolean("game_bar_gpu_temp_enable", false);
 
-        mDoubleTapCaptureEnabled = prefs.getBoolean("game_bar_doubletap_capture", false);
-        mSingleTapToggleEnabled  = prefs.getBoolean("game_bar_single_tap_toggle", false);
+        mDoubleTapCaptureEnabled = prefs.getBoolean("game_bar_doubletap_capture", true);
+        mSingleTapToggleEnabled  = prefs.getBoolean("game_bar_single_tap_toggle", true);
 
-        updateSplitMode(prefs.getString("game_bar_split_mode", "stacked"));
-        updateTextSize(prefs.getInt("game_bar_text_size", 16));
+        updateSplitMode(prefs.getString("game_bar_split_mode", "side_by_side"));
+        updateTextSize(prefs.getInt("game_bar_text_size", 14));
         updateBackgroundAlpha(prefs.getInt("game_bar_background_alpha", 128));
-        updateCornerRadius(prefs.getInt("game_bar_corner_radius", 16));
-        updatePadding(prefs.getInt("game_bar_padding", 12));
+        updateCornerRadius(prefs.getInt("game_bar_corner_radius", 90));
+        updatePadding(prefs.getInt("game_bar_padding", 8));
         updateTitleColor(prefs.getString("game_bar_title_color", "#FFFFFF"));
         updateValueColor(prefs.getString("game_bar_value_color", "#4CAF50"));
         updateOverlayFormat(prefs.getString("game_bar_format", "full"));
         updateUpdateInterval(prefs.getString("game_bar_update_interval", "1000"));
-        updatePosition(prefs.getString("game_bar_position", "top_left"));
+        updatePosition(prefs.getString("game_bar_position", "top_center"));
 
         int spacing = prefs.getInt("game_bar_item_spacing", 8);
         updateItemSpacing(spacing);
 
-        mLongPressEnabled = prefs.getBoolean("game_bar_longpress_enable", false);
-        String lpTimeoutStr = prefs.getString("game_bar_longpress_timeout", "1000");
+        mLongPressEnabled = prefs.getBoolean("game_bar_longpress_enable", true);
+        String lpTimeoutStr = prefs.getString("game_bar_longpress_timeout", "500");
         try {
             long lpt = Long.parseLong(lpTimeoutStr);
             setLongPressThresholdMs(lpt);
