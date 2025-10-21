@@ -4,34 +4,28 @@ A comprehensive device tree for Xiaomi Garnet (Redmi Note 13 Pro 5G / Poco X6 5G
 
 ## 🪧 Attencion
 
-This branch is the initial release is recommended to switch to Branch 2.0.11
-
-## ✨ Features
-
-This device tree is meticulously crafted to provide a robust foundation for custom Android development on the Xiaomi Garnet, offering a range of essential features:
-
-*   🚀 **Full Device Compatibility:** Ensures all core hardware components of the Xiaomi Garnet are properly recognized and function seamlessly with AOSP-based ROMs.
+This branch is for Alphadroid builds
 
 ## ⚙️ Installation Guide
 
-To set up your build environment and integrate this device tree, follow these steps. This guide assumes you have a working AOSP/LineageOS build environment already configured.
+To set up your build environment and integrate this device tree, follow these steps. This guide assumes you have a working AlphaDroid build environment already configured.
 
 ### Prerequisites
 
 *   A Linux-based operating system (Ubuntu 20.04+ LTS recommended).
 *   `repo` tool installed and configured.
 *   Sufficient disk space (250GB+ recommended).
-*   AOSP/LineageOS Source.
+*   AlphaDroid Source.
 
 ### Step-by-Step Installation
 
-1.  **Navigate to your AOSP/LineageOS source directory:**
+1.  **Navigate to your AlphaDroid source directory:**
 
     ```bash
-    cd ~/android/lineage
+    cd ~/garnet/alphadroid
     ```
 
-    _(Replace `~/android/lineage` with your actual source directory path)_
+    _(Replace `~/garnet/alphadroid` with your actual source directory path)_
 
 2.  **Clone the `android_device_xiaomi_garnet` repository:**
 
@@ -41,26 +35,20 @@ To set up your build environment and integrate this device tree, follow these st
 
     This will place the device tree in the correct location for your build system to recognize it.
 
-## 🚀 Usage Examples
+## 🚀 Build Initialization
 
-Once the device tree is installed and proprietary files are extracted, you can use it to build a custom ROM for your Xiaomi Garnet.
+Once the device tree is cloned, you can use it to build a custom ROM for your Xiaomi Garnet.
 
 1.  **Initialize the build environment:**
 
     ```bash
-    source build/envsetup.sh
+    . build/envsetup.sh
     ```
 
-2.  **Select the device configuration:**
+2.  **Start the build process:**
 
     ```bash
-    lunch lineage_garnet-userdebug
-    ```
-
-3.  **Start the build process:**
-
-    ```bash
-    m -j$(nproc --all)
+    brunch alpha_garnet-userdebug
     ```
 
     This command will compile the entire ROM for your Xiaomi Garnet. The resulting `.zip` file, which can be flashed via a custom recovery, will be located in the `out/target/product/garnet/` directory upon successful completion.
